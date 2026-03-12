@@ -1,26 +1,43 @@
 [package]
-name = "fetch_MCP_rust"
+name = "fetch-mcp-rs"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rmcp = { version = "0.2.0", features = ["client", "server", "macros", "transport-io", "transport-child-process", "schemars"] }
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "io-std", "time"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-schemars = "0.8"
-reqwest = { version = "0.12", default-features = false, features = ["json", "gzip", "brotli", "deflate", "rustls-tls"] }
-async-trait = "0.1"
-anyhow = "1"
+rmcp = { version = "1.2.0", features = ["client", "server", "macros", "transport-io", "transport-child-process", "schemars"] }
+tokio = { version = "1.50.0", features = ["macros", "rt-multi-thread", "io-std", "time"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.22", features = ["fmt", "env-filter"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+schemars = "1.2.1"
+reqwest = { version = "0.13.2", default-features = false, features = ["json", "gzip", "brotli", "deflate", "rustls"] }
+async-trait = "0.1.89"
+anyhow = "1.0.102"
+html2md = "0.2.15"
+texting_robots = "0.2.2"
 
 [dev-dependencies]
-serde_json = "1"
-anyhow = "1"
+serde_json = "1.0.149"
+anyhow = "1.0.102"
 
 [profile.release]
-opt-level = 3
-lto = true
+opt-level = "z"
+lto = "fat"
 codegen-units = 1
+strip = "symbols"
 
+[profile.dev]
+codegen-units = 256
+incremental = true
+
+[profile.test]
+codegen-units = 256
+incremental = true
+
+[profile.release-fast]
+inherits = "release"
+opt-level = 3
+lto = "thin"
+codegen-units = 16
+strip = "debuginfo"
